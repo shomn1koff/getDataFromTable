@@ -1,11 +1,25 @@
-import logo from './logo.svg';
 import './App.css';
+import useGoogleSheets from 'use-google-sheets';
+
 
 function App() {
+  const { data, loading, error } = useGoogleSheets({
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    sheetId: process.env.REACT_APP_GOOGLE_SHEETS_ID,
+    sheetsOptions: [{ id: 'ИВБО-03-18' }, { id: 'ИВБО-10-18'}],
+  });
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    console.log(process.env.REACT_APP_GOOGLE_API_KEY, process.env.REACT_APP_GOOGLE_SHEETS_ID)
+    return <div>Error!</div>;
+  }
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
@@ -17,6 +31,7 @@ function App() {
         >
           Learn React
         </a>
+        <code>{JSON.stringify(data)}</code>
       </header>
     </div>
   );
